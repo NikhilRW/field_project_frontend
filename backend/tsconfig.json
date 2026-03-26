@@ -15,9 +15,16 @@
       "@models/*": ["./src/models/*"],
       "@routes/*": ["./src/routes/*"],
       "@services/*": ["./src/services/*"],
-      "@utils/*": ["./src/utils/*"]
-    }
+      "@utils/*": ["./src/utils/*"],
+    },
+    "types": ["node"],
   },
-  "include": ["src/**/*.ts", "src/**/*.js", "./env.d.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.js",
+    "src/types/**/*.d.ts",
+    "./env.d.ts",
+    "drizzle.config.ts",
+  ],
+  "exclude": ["node_modules", "dist"],
 }

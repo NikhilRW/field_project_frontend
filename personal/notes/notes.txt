@@ -1,0 +1,6 @@
+1.Now all the mock data is coming from the frontend itself make it come from the backend create routes controllers as per requirements
+2.Make the authentication feature work with frontend and backend.
+3.Make the beneficiary feature alive.
+4.Create the flow of the app of the as a volunteer.
+5.Volunteer Task Assignment Add this feature so that admin can assign the volunteer any kind of the task.
+6.Donation receipts generation.

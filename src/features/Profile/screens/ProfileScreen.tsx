@@ -1,0 +1,125 @@
+import React from "react";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { router } from "expo-router";
+import { ChevronRight, Phone, Mail, MapPin, Shield } from "lucide-react-native";
+import { Colors } from "@/shared/constants/color";
+import { useLogoutMutation } from "@/features/Auth/hooks/useAuthMutations";
+import { buildProfileSettingsItems } from "../constants/settingsItems";
+import { profileStyles as styles } from "../styles/profileStyles";
+
+export default function ProfileScreen() {
+  const insets = useSafeAreaInsets();
+  const logoutMutation = useLogoutMutation();
+
+  const handleLogout = async () => {
+    await logoutMutation.mutateAsync();
+    router.replace("/(auth)/login" as any);
+  };
+
+  const settingsItems = buildProfileSettingsItems(handleLogout);
+
+  return (
+    <View style={[styles.container, { paddingTop: insets.top }]}>
+      <View style={styles.topBg} />
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.profileCard}>
+          <View style={styles.avatarSection}>
+            <View style={styles.orgAvatar}>
+              <Text style={styles.orgAvatarText}>HH</Text>
+            </View>
+            <View style={styles.verifiedBadge}>
+              <Shield size={10} color="#fff" fill="#fff" />
+            </View>
+          </View>
+          <Text style={styles.orgName}>Helping Hands</Text>
+          <Text style={styles.orgFullName}>Samajik Seva Sanstha</Text>
+          <Text style={styles.orgReg}>Regd. NGO · Kalyan, Maharashtra</Text>
+
+          <View style={styles.contactList}>
+            <View style={styles.contactItem}>
+              <Phone size={13} color={Colors.textTertiary} strokeWidth={1.6} />
+              <Text style={styles.contactText}>+91 98765 43210</Text>
+            </View>
+            <View style={styles.contactItem}>
+              <Mail size={13} color={Colors.textTertiary} strokeWidth={1.6} />
+              <Text style={styles.contactText}>helpinghand7887@gmail.com</Text>
+            </View>
+            <View style={styles.contactItem}>
+              <MapPin size={13} color={Colors.textTertiary} strokeWidth={1.6} />
+              <Text style={styles.contactText}>
+                Opp. Mrunmayi Palace, Chikanghar, Kalyan
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.impactRow}>
+          <View style={styles.impactItem}>
+            <Text style={styles.impactValue}>248</Text>
+            <Text style={styles.impactLabel}>People</Text>
+          </View>
+          <View style={styles.impactDivider} />
+          <View style={styles.impactItem}>
+            <Text style={styles.impactValue}>64</Text>
+            <Text style={styles.impactLabel}>Volunteers</Text>
+          </View>
+          <View style={styles.impactDivider} />
+          <View style={styles.impactItem}>
+            <Text style={styles.impactValue}>18</Text>
+            <Text style={styles.impactLabel}>Programs</Text>
+          </View>
+        </View>
+
+        <Text style={styles.sectionLabel}>Settings</Text>
+
+        <View style={styles.settingsCard}>
+          {settingsItems.map((item, i) => (
+            <TouchableOpacity
+              key={i}
+              style={[
+                styles.settingsRow,
+                i === settingsItems.length - 1 && styles.settingsRowLast,
+              ]}
+              onPress={item.onPress}
+              activeOpacity={0.6}
+              testID={`settings-${i}`}
+            >
+              <View
+                style={[
+                  styles.settingsIconWrap,
+                  { backgroundColor: item.iconBg },
+                ]}
+              >
+                {item.icon}
+              </View>
+              <View style={styles.settingsTextWrap}>
+                <Text
+                  style={[
+                    styles.settingsLabel,
+                    item.isLogout && styles.logoutText,
+                  ]}
+                >
+                  {item.label}
+                </Text>
+                {item.sub && <Text style={styles.settingsSub}>{item.sub}</Text>}
+              </View>
+              {!item.isLogout && (
+                <ChevronRight size={15} color={Colors.textTertiary} />
+              )}
+            </TouchableOpacity>
+          ))}
+        </View>
+
+        <Text style={styles.footer}>
+          Smart NGO v1.0 · SDG-3: Good Health & Well-Being
+        </Text>
+        <View style={{ height: 32 }} />
+      </ScrollView>
+    </View>
+  );
+}

@@ -1,0 +1,172 @@
+import { StyleSheet } from "react-native";
+import { Colors } from "@/shared/constants/color";
+
+export const dashboardStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+  scroll: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingHorizontal: 20,
+  },
+  greetingSection: {
+    marginTop: 4,
+    marginBottom: 18,
+  },
+  greetingSub: {
+    fontSize: 13,
+    color: Colors.textTertiary,
+    marginBottom: 2,
+  },
+  greeting: {
+    fontSize: 20,
+    fontWeight: "700" as const,
+    color: Colors.textPrimary,
+    letterSpacing: -0.3,
+  },
+  statsGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginBottom: 20,
+  },
+  statCard: {
+    width: "48%",
+    flexGrow: 1,
+    backgroundColor: Colors.surface,
+    borderRadius: 14,
+    padding: 14,
+  },
+  statIconWrap: {
+    width: 32,
+    height: 32,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 10,
+  },
+  statValue: {
+    fontSize: 22,
+    fontWeight: "700" as const,
+    color: Colors.textPrimary,
+    letterSpacing: -0.5,
+  },
+  statLabel: {
+    fontSize: 12,
+    color: Colors.textTertiary,
+    marginTop: 2,
+  },
+  quickActionsRow: {
+    flexDirection: "row",
+    gap: 10,
+    marginBottom: 24,
+  },
+  quickAction: {
+    flex: 1,
+    alignItems: "center",
+    gap: 7,
+  },
+  quickActionIcon: {
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  quickActionLabel: {
+    fontSize: 11,
+    fontWeight: "500" as const,
+    color: Colors.textSecondary,
+    textAlign: "center",
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: "600" as const,
+    color: Colors.textPrimary,
+  },
+  viewAllBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+  },
+  viewAllText: {
+    fontSize: 13,
+    color: Colors.primary,
+    fontWeight: "500" as const,
+  },
+  activityCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.surface,
+    borderRadius: 14,
+    marginBottom: 8,
+    overflow: "hidden",
+  },
+  activityIndicator: {
+    width: 3,
+    alignSelf: "stretch",
+  },
+  activityContent: {
+    flex: 1,
+    paddingVertical: 13,
+    paddingLeft: 13,
+    paddingRight: 4,
+  },
+  activityTop: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 6,
+  },
+  activityName: {
+    fontSize: 14,
+    fontWeight: "600" as const,
+    color: Colors.textPrimary,
+    flex: 1,
+    marginRight: 8,
+  },
+  statusPill: {
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+  },
+  statusText: {
+    fontSize: 11,
+    fontWeight: "500" as const,
+  },
+  activityMeta: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginBottom: 4,
+  },
+  metaItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 3,
+  },
+  metaDot: {
+    width: 2,
+    height: 2,
+    borderRadius: 1,
+    backgroundColor: Colors.textTertiary,
+  },
+  metaText: {
+    fontSize: 11,
+    color: Colors.textTertiary,
+  },
+  volunteerLabel: {
+    fontSize: 11,
+    color: Colors.textSecondary,
+    marginTop: 2,
+  },
+});
