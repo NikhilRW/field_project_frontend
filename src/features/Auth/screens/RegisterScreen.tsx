@@ -57,11 +57,9 @@ export default function RegisterScreen() {
 
       Alert.alert(
         "Account created",
-        "Please verify your email before logging in.",
+        "Please check your email to verify your account, then sign in.",
       );
-      router.replace(
-        `/(auth)/verify-email?email=${encodeURIComponent(email)}` as any,
-      );
+      router.replace("/(auth)/login" as any);
     } catch (error: any) {
       Alert.alert(
         "Registration failed",

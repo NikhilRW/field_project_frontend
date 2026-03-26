@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Clock, MapPin, Users } from "lucide-react-native";
+import { router } from "expo-router";
+import { Clock, MapPin, Plus, Users } from "lucide-react-native";
 import { Colors } from "@/shared/constants/color";
 import AppHeader from "@/shared/components/AppHeader";
+import { useAuthStore } from "@/shared/stores/authStore";
 import { useActivities } from "../hooks/useActivities";
 import { activityFilterTabs } from "../constants/filterTabs";
 import type { ActivityFilterTab } from "../types/filter";
@@ -17,6 +19,8 @@ export default function ActivitiesScreen() {
   const insets = useSafeAreaInsets();
   const [activeTab, setActiveTab] = useState<ActivityFilterTab>("All");
   const { data: activityItems = [] } = useActivities();
+  const role = useAuthStore((state) => state.role);
+  const isAdmin = role === "Admin";
 
   const filtered = activityItems.filter(
     (a) => activeTab === "All" || a.status === activeTab,
@@ -32,10 +36,24 @@ export default function ActivitiesScreen() {
       <AppHeader />
 
       <View style={styles.titleSection}>
-        <Text style={styles.title}>Activities</Text>
-        <Text style={styles.titleSub}>
-          {activityItems.length} total programs
-        </Text>
+        <View style={styles.titleRow}>
+          <View>
+            <Text style={styles.title}>Activities</Text>
+            <Text style={styles.titleSub}>
+              {activityItems.length} total programs
+            </Text>
+          </View>
+          {isAdmin && (
+            <TouchableOpacity
+              style={styles.addBtn}
+              onPress={() => router.push("/(main)/add-activity" as any)}
+              testID="add-activity-btn"
+            >
+              <Plus size={14} color={Colors.primary} strokeWidth={2} />
+              <Text style={styles.addBtnText}>Add</Text>
+            </TouchableOpacity>
+          )}
+        </View>
       </View>
 
       <View style={styles.statsRow}>
@@ -91,6 +109,9 @@ export default function ActivitiesScreen() {
             key={activity.id}
             style={styles.card}
             activeOpacity={0.7}
+            onPress={() =>
+              router.push(`/(main)/activity/${activity.id}` as any)
+            }
             testID={`activity-${activity.id}`}
           >
             <View style={styles.cardHeader}>

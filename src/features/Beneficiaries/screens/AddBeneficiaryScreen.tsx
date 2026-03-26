@@ -8,8 +8,10 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
+import { showMessage } from "react-native-flash-message";
 import { Camera, ChevronDown } from "lucide-react-native";
 import { Colors } from "@/shared/constants/color";
+import { useCreateBeneficiary } from "../hooks/useCreateBeneficiary";
 import {
   beneficiaryCategories,
   beneficiaryGenders,
@@ -29,22 +31,57 @@ export default function AddBeneficiaryScreen() {
   const [healthStatus, setHealthStatus] = useState<HealthStatus>("Good");
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   const [showHealthPicker, setShowHealthPicker] = useState(false);
+  const {mutateAsync: createBeneficiary,isPending:isSaving} = useCreateBeneficiary();
 
   const genders: Gender[] = beneficiaryGenders;
   const categories: Category[] = beneficiaryCategories;
   const healthOptions: HealthStatus[] = beneficiaryHealthOptions;
   const healthColor = getHealthColor;
 
-  const handleSave = () => {
-    console.log("Saving beneficiary:", {
-      name,
-      age,
-      gender,
-      category,
-      address,
-      healthStatus,
-    });
-    router.back();
+  const handleSave = async () => {
+    if (!name.trim() || !age.trim() || !address.trim()) {
+      showMessage({
+        message: "Missing details",
+        description: "Please fill in name, age, and address.",
+        type: "warning",
+      });
+      return;
+    }
+
+    const parsedAge = Number(age);
+    if (!Number.isFinite(parsedAge) || parsedAge <= 0) {
+      showMessage({
+        message: "Invalid age",
+        description: "Please enter a valid age.",
+        type: "warning",
+      });
+      return;
+    }
+
+    try {
+      await createBeneficiary({
+        name: name.trim(),
+        age: parsedAge,
+        gender,
+        category,
+        address: address.trim(),
+        healthStatus,
+      });
+
+      showMessage({
+        message: "Beneficiary added",
+        description: "New beneficiary saved successfully.",
+        type: "success",
+      });
+      router.back();
+    } catch (error: any) {
+      showMessage({
+        message: "Save failed",
+        description:
+          error?.message ?? "Unable to save beneficiary. Please try again.",
+        type: "danger",
+      });
+    }
   };
 
   return (
@@ -222,8 +259,13 @@ export default function AddBeneficiaryScreen() {
           onPress={handleSave}
           activeOpacity={0.8}
           testID="save-btn"
+          disabled={isSaving}
         >
-          <Text style={styles.saveBtnText}>Save Beneficiary</Text>
+          <Text style={styles.saveBtnText}>
+            {isSaving
+              ? "Saving..."
+              : "Save Beneficiary"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

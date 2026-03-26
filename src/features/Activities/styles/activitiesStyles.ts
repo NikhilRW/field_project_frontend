@@ -11,6 +11,25 @@ export const activitiesStyles = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 12,
   },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  addBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 10,
+    backgroundColor: Colors.primaryLight,
+  },
+  addBtnText: {
+    color: Colors.primary,
+    fontWeight: "600" as const,
+    fontSize: 12,
+  },
   title: {
     fontSize: 20,
     fontWeight: "700" as const,

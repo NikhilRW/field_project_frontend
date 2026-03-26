@@ -5,12 +5,17 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "frontend",
+    "scheme": "helpinghands",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "associatedDomains": ["applinks:helpinghands.com"],
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We use your location to pick activity locations on the map."
+      }
     },
     "android": {
+      "config": { "googleMaps": { "apiKey": "AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao" } },
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -18,7 +23,21 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.nikhilthegreatest.frontend"
+      "package": "com.nikhilthegreatest.frontend",
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "helpinghands.com",
+              "pathPrefix": "/auth"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "output": "static",

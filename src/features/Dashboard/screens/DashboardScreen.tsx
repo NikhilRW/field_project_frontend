@@ -1,5 +1,10 @@
 import React from "react";
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import Animated, {
+  FadeInDown,
+  FadeInRight,
+  ZoomIn,
+} from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import {
@@ -44,25 +49,34 @@ export default function DashboardScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.greetingSection}>
+        <Animated.View
+          entering={FadeInDown.delay(100).springify()}
+          style={styles.greetingSection}
+        >
           <Text style={styles.greetingSub}>Welcome back</Text>
           <Text style={styles.greeting}>Good Morning, Admin</Text>
-        </View>
+        </Animated.View>
 
         <View style={styles.statsGrid}>
-          <View style={styles.statCard}>
+          <Animated.View
+            entering={ZoomIn.delay(200).springify()}
+            style={styles.statCard}
+          >
             <View
               style={[
                 styles.statIconWrap,
                 { backgroundColor: Colors.primaryLight },
               ]}
             >
-              <Users size={16} color={Colors.primary} strokeWidth={1.8} />
+              <Users size={20} color={Colors.primary} strokeWidth={2} />
             </View>
             <Text style={styles.statValue}>{stats.beneficiaries}</Text>
             <Text style={styles.statLabel}>Beneficiaries</Text>
-          </View>
-          <View style={styles.statCard}>
+          </Animated.View>
+          <Animated.View
+            entering={ZoomIn.delay(300).springify()}
+            style={styles.statCard}
+          >
             <View
               style={[
                 styles.statIconWrap,
@@ -70,45 +84,50 @@ export default function DashboardScreen() {
               ]}
             >
               <CalendarDays
-                size={16}
+                size={20}
                 color={Colors.secondary}
-                strokeWidth={1.8}
+                strokeWidth={2}
               />
             </View>
             <Text style={styles.statValue}>{stats.activities}</Text>
             <Text style={styles.statLabel}>Programs</Text>
-          </View>
-          <View style={styles.statCard}>
+          </Animated.View>
+          <Animated.View
+            entering={ZoomIn.delay(400).springify()}
+            style={styles.statCard}
+          >
             <View
               style={[
                 styles.statIconWrap,
                 { backgroundColor: Colors.accentLight },
               ]}
             >
-              <HeartHandshake
-                size={16}
-                color={Colors.accent}
-                strokeWidth={1.8}
-              />
+              <HeartHandshake size={20} color={Colors.accent} strokeWidth={2} />
             </View>
             <Text style={styles.statValue}>{stats.volunteers}</Text>
             <Text style={styles.statLabel}>Volunteers</Text>
-          </View>
-          <View style={styles.statCard}>
+          </Animated.View>
+          <Animated.View
+            entering={ZoomIn.delay(500).springify()}
+            style={styles.statCard}
+          >
             <View
               style={[
                 styles.statIconWrap,
                 { backgroundColor: Colors.errorLight },
               ]}
             >
-              <HandCoins size={16} color={Colors.error} strokeWidth={1.8} />
+              <HandCoins size={20} color={Colors.error} strokeWidth={2} />
             </View>
             <Text style={styles.statValue}>{donationLabel}</Text>
             <Text style={styles.statLabel}>Donations</Text>
-          </View>
+          </Animated.View>
         </View>
 
-        <View style={styles.quickActionsRow}>
+        <Animated.View
+          entering={FadeInDown.delay(600).springify()}
+          style={styles.quickActionsRow}
+        >
           <TouchableOpacity
             style={styles.quickAction}
             onPress={() => router.push("/(main)/volunteers" as any)}
@@ -120,11 +139,7 @@ export default function DashboardScreen() {
                 { backgroundColor: Colors.accentLight },
               ]}
             >
-              <HeartHandshake
-                size={17}
-                color={Colors.accent}
-                strokeWidth={1.8}
-              />
+              <HeartHandshake size={22} color={Colors.accent} strokeWidth={2} />
             </View>
             <Text style={styles.quickActionLabel}>Volunteers</Text>
           </TouchableOpacity>
@@ -139,7 +154,7 @@ export default function DashboardScreen() {
                 { backgroundColor: Colors.secondaryLight },
               ]}
             >
-              <MapPin size={17} color={Colors.secondary} strokeWidth={1.8} />
+              <MapPin size={22} color={Colors.secondary} strokeWidth={2} />
             </View>
             <Text style={styles.quickActionLabel}>Surveys</Text>
           </TouchableOpacity>
@@ -154,7 +169,7 @@ export default function DashboardScreen() {
                 { backgroundColor: Colors.primaryLight },
               ]}
             >
-              <Users size={17} color={Colors.primary} strokeWidth={1.8} />
+              <Users size={22} color={Colors.primary} strokeWidth={2} />
             </View>
             <Text style={styles.quickActionLabel}>Add Person</Text>
           </TouchableOpacity>
@@ -169,85 +184,98 @@ export default function DashboardScreen() {
                 { backgroundColor: Colors.errorLight },
               ]}
             >
-              <HandCoins size={17} color={Colors.error} strokeWidth={1.8} />
+              <HandCoins size={22} color={Colors.error} strokeWidth={2} />
             </View>
             <Text style={styles.quickActionLabel}>Funds</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        <View style={styles.sectionHeader}>
+        <Animated.View
+          entering={FadeInDown.delay(700).springify()}
+          style={styles.sectionHeader}
+        >
           <Text style={styles.sectionTitle}>Recent Activities</Text>
           <TouchableOpacity
             style={styles.viewAllBtn}
             onPress={() => router.push("/(tabs)/activities" as any)}
           >
             <Text style={styles.viewAllText}>See all</Text>
-            <ArrowUpRight size={13} color={Colors.primary} strokeWidth={2} />
+            <ArrowUpRight size={16} color={Colors.primary} strokeWidth={2.5} />
           </TouchableOpacity>
-        </View>
+        </Animated.View>
 
-        {recentActivities.map((activity) => (
-          <TouchableOpacity
+        {recentActivities.map((activity, index) => (
+          <Animated.View
             key={activity.id}
-            style={styles.activityCard}
-            activeOpacity={0.7}
-            testID={`activity-${activity.id}`}
+            entering={FadeInRight.delay(800 + index * 100).springify()}
           >
-            <View
-              style={[
-                styles.activityIndicator,
-                { backgroundColor: getDashboardStatusColor(activity.status) },
-              ]}
-            />
-            <View style={styles.activityContent}>
-              <View style={styles.activityTop}>
-                <Text style={styles.activityName} numberOfLines={1}>
-                  {activity.name}
-                </Text>
-                <View
-                  style={[
-                    styles.statusPill,
-                    { backgroundColor: getDashboardStatusBg(activity.status) },
-                  ]}
-                >
-                  <Text
+            <TouchableOpacity
+              style={styles.activityCard}
+              activeOpacity={0.7}
+              testID={`activity-${activity.id}`}
+            >
+              <View
+                style={[
+                  styles.activityIndicator,
+                  { backgroundColor: getDashboardStatusColor(activity.status) },
+                ]}
+              />
+              <View style={styles.activityContent}>
+                <View style={styles.activityTop}>
+                  <Text style={styles.activityName} numberOfLines={1}>
+                    {activity.name}
+                  </Text>
+                  <View
                     style={[
-                      styles.statusText,
-                      { color: getDashboardStatusColor(activity.status) },
+                      styles.statusPill,
+                      {
+                        backgroundColor: getDashboardStatusBg(activity.status),
+                      },
                     ]}
                   >
-                    {activity.status}
-                  </Text>
+                    <Text
+                      style={[
+                        styles.statusText,
+                        { color: getDashboardStatusColor(activity.status) },
+                      ]}
+                    >
+                      {activity.status}
+                    </Text>
+                  </View>
                 </View>
+                <View style={styles.activityMeta}>
+                  <View style={styles.metaItem}>
+                    <Clock
+                      size={14}
+                      color={Colors.textTertiary}
+                      strokeWidth={2}
+                    />
+                    <Text style={styles.metaText}>{activity.date}</Text>
+                  </View>
+                  <View style={styles.metaDot} />
+                  <View style={styles.metaItem}>
+                    <MapPin
+                      size={14}
+                      color={Colors.textTertiary}
+                      strokeWidth={2}
+                    />
+                    <Text style={styles.metaText} numberOfLines={1}>
+                      {activity.location}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.volunteerLabel}>
+                  {activity.volunteers} volunteer
+                  {activity.volunteers !== 1 ? "s" : ""} assigned
+                </Text>
               </View>
-              <View style={styles.activityMeta}>
-                <View style={styles.metaItem}>
-                  <Clock
-                    size={11}
-                    color={Colors.textTertiary}
-                    strokeWidth={1.6}
-                  />
-                  <Text style={styles.metaText}>{activity.date}</Text>
-                </View>
-                <View style={styles.metaDot} />
-                <View style={styles.metaItem}>
-                  <MapPin
-                    size={11}
-                    color={Colors.textTertiary}
-                    strokeWidth={1.6}
-                  />
-                  <Text style={styles.metaText} numberOfLines={1}>
-                    {activity.location}
-                  </Text>
-                </View>
-              </View>
-              <Text style={styles.volunteerLabel}>
-                {activity.volunteers} volunteer
-                {activity.volunteers !== 1 ? "s" : ""} assigned
-              </Text>
-            </View>
-            <ChevronRight size={15} color={Colors.textTertiary} />
-          </TouchableOpacity>
+              <ChevronRight
+                size={18}
+                color={Colors.textTertiary}
+                strokeWidth={2}
+              />
+            </TouchableOpacity>
+          </Animated.View>
         ))}
 
         <View style={{ height: 32 }} />

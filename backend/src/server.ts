@@ -6,6 +6,7 @@ import morgan from "morgan";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import authRoutes from "./routes/authRoutes";
+import notificationRoutes from "./routes/notificationRoutes";
 import activityRoutes from "./routes/activityRoutes";
 import beneficiaryRoutes from "./routes/beneficiaryRoutes";
 import dashboardRoutes from "./routes/dashboardRoutes";
@@ -32,6 +33,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/notifications", notificationRoutes);
 app.use("/api/activities", activityRoutes);
 app.use("/api/beneficiaries", beneficiaryRoutes);
 app.use("/api/dashboard", dashboardRoutes);

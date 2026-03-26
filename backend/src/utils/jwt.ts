@@ -8,18 +8,37 @@ export type AuthTokenPayload = {
 
 const accessSecret = process.env.JWT_SECRET ?? "dev_access_secret";
 const refreshSecret = process.env.JWT_REFRESH_SECRET ?? "dev_refresh_secret";
-const accessExpiresIn = process.env.JWT_ACCESS_EXPIRES_IN ?? "15m";
-const refreshExpiresIn = process.env.JWT_REFRESH_EXPIRES_IN ?? "7d";
+
+const normalizeExpiresIn = (
+  value: string | undefined,
+  fallback: string,
+): string | number => {
+  if (!value) return fallback;
+  const trimmed = value.trim();
+  if (!trimmed) return fallback;
+  if (/^\d+$/.test(trimmed)) return Number(trimmed);
+  if (/^\d+(ms|s|m|h|d|w|y)$/.test(trimmed)) return trimmed;
+  return fallback;
+};
+
+const accessExpiresIn = normalizeExpiresIn(
+  process.env.JWT_ACCESS_EXPIRES_IN,
+  "15m",
+);
+const refreshExpiresIn = normalizeExpiresIn(
+  process.env.JWT_REFRESH_EXPIRES_IN,
+  "7d",
+);
 
 export const signAccessToken = (payload: AuthTokenPayload) => {
   return jwt.sign(payload, accessSecret, {
-    expiresIn: Number(accessExpiresIn),
+    expiresIn: accessExpiresIn as any,
   });
 };
 
 export const signRefreshToken = (payload: AuthTokenPayload) => {
   return jwt.sign(payload, refreshSecret, {
-    expiresIn: Number(refreshExpiresIn),
+    expiresIn: refreshExpiresIn as any,
   });
 };
 

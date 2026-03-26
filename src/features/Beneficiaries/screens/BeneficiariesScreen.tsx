@@ -170,7 +170,7 @@ export default function BeneficiariesScreen() {
 
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push("/(main)/add-beneficiary" as any)}
+        onPress={() => router.push("/(main)/add-beneficiary")}
         activeOpacity={0.8}
         testID="add-fab"
       >

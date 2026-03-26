@@ -48,15 +48,6 @@ export default function LoginScreen() {
       router.replace(destination as any);
     } catch (error: any) {
       const message = error?.message ?? "Unable to sign in. Please try again.";
-      if (
-        typeof message === "string" &&
-        message.toLowerCase().includes("verify")
-      ) {
-        router.replace(
-          `/(auth)/verify-email?email=${encodeURIComponent(email)}` as any,
-        );
-        return;
-      }
       Alert.alert("Login failed", message);
     }
   };

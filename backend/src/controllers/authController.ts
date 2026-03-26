@@ -6,6 +6,7 @@ import {
   emailVerificationTokens,
   passwordResetTokens,
   users,
+  volunteerProfiles,
 } from "../config/databaseSetup";
 import { comparePassword, hashPassword } from "../utils/password";
 import {
@@ -18,6 +19,7 @@ import {
   sendPasswordResetEmail,
   sendVerificationEmail as sendVerificationEmailMessage,
 } from "../utils/email";
+import { getColorFromName, getInitials } from "../utils/beneficiary";
 
 const normalizeEmail = (email: string) => email.trim().toLowerCase();
 
@@ -94,6 +96,17 @@ export const register = async (req: Request, res: Response) => {
       return res
         .status(500)
         .json({ success: false, error: "Failed to create user." });
+    }
+
+    if (created.role === "Volunteer") {
+      await db.insert(volunteerProfiles).values({
+        userId: created.id,
+        roleTitle: "Volunteer",
+        skill: "General",
+        available: true,
+        initials: getInitials(created.name),
+        color: getColorFromName(created.name),
+      });
     }
 
     const { token, tokenHash } = generateTokenPair();
@@ -411,6 +424,61 @@ export const forgotPassword = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ success: false, error: "Unable to send reset email." });
+  }
+};
+
+export const verifyResetToken = async (req: Request, res: Response) => {
+  try {
+    const { token, email } = req.body as { token?: string; email?: string };
+
+    if (!token || !email) {
+      return res.status(400).json({
+        success: false,
+        error: "Token and email are required.",
+      });
+    }
+
+    const normalizedEmail = normalizeEmail(email);
+
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, normalizedEmail));
+
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid or expired token.",
+      });
+    }
+
+    const tokenHash = hashToken(token);
+
+    const [record] = await db
+      .select()
+      .from(passwordResetTokens)
+      .where(
+        and(
+          eq(passwordResetTokens.tokenHash, tokenHash),
+          eq(passwordResetTokens.userId, user.id),
+          isNull(passwordResetTokens.usedAt),
+          gt(passwordResetTokens.expiresAt, new Date()),
+        ),
+      );
+
+    if (!record) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid or expired token.",
+      });
+    }
+
+    return res.status(200).json({ success: true });
+  } catch (error) {
+    console.error("Verify reset token error:", error);
+    return res
+      .status(500)
+      .json({ success: false, error: "Unable to verify reset token." });
   }
 };
 

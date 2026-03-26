@@ -37,6 +37,8 @@ export const beneficiaryCategoryEnum = pgEnum("beneficiary_category", [
 export type BeneficiaryCategory =
   (typeof beneficiaryCategoryEnum.enumValues)[number];
 
+export const genderEnum = pgEnum("gender", ["Male", "Female", "Other"]);
+
 export const healthStatusEnum = pgEnum("health_status", [
   "Good",
   "Moderate",
@@ -62,6 +64,7 @@ export const users = pgTable(
     role: userRoleEnum("role").notNull(),
     isEmailVerified: boolean("is_email_verified").notNull().default(false),
     refreshTokenHash: text("refresh_token_hash"),
+    expoPushToken: text("expo_push_token"),
     phone: text("phone"),
     avatarUrl: text("avatar_url"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
@@ -120,6 +123,27 @@ export const passwordResetTokens = pgTable(
   }),
 );
 
+export const notifications = pgTable(
+  "notifications",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    title: text("title").notNull(),
+    body: text("body").notNull(),
+    data: text("data"),
+    readAt: timestamp("read_at", { withTimezone: true, mode: "date" }),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    userIdIdx: index("notifications_user_id_idx").on(table.userId),
+    readAtIdx: index("notifications_read_at_idx").on(table.readAt),
+  }),
+);
+
 export const volunteerProfiles = pgTable(
   "volunteer_profiles",
   {
@@ -143,6 +167,7 @@ export const beneficiaries = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     name: text("name").notNull(),
     age: integer("age").notNull(),
+    gender: genderEnum("gender").notNull().default("Other"),
     category: beneficiaryCategoryEnum("category").notNull(),
     healthStatus: healthStatusEnum("health_status").notNull(),
     address: text("address").notNull(),
@@ -331,6 +356,7 @@ export const schema = {
   surveys,
   emailVerificationTokens,
   passwordResetTokens,
+  notifications,
 };
 
 export const pool = new Pool({

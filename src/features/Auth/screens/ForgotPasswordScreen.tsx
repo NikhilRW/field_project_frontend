@@ -25,12 +25,10 @@ export default function ForgotPasswordScreen() {
         Alert.alert("Missing email", "Please enter your email address.");
         return;
       }
-
       await forgotMutation.mutateAsync(email.trim());
-
       Alert.alert(
         "Check your email",
-        "If an account exists for this email, a reset token has been sent.",
+        "If an account exists for this email, a reset password link has been sent to your email address.",
       );
       router.replace("/(auth)/reset-password" as any);
     } catch (error: any) {
@@ -51,16 +49,17 @@ export default function ForgotPasswordScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
+        {/*TODO: go back button should be created */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          style={{ alignSelf: "flex-start", position: 'absolute', marginBottom: 12 }}
+        >
+          <ArrowLeft size={18} color={Colors.textPrimary} strokeWidth={2} />
+        </TouchableOpacity>
         <View style={styles.topSection}>
-          <TouchableOpacity
-            onPress={() => router.back()}
-            style={{ alignSelf: "flex-start", marginBottom: 12 }}
-          >
-            <ArrowLeft size={18} color={Colors.textPrimary} strokeWidth={2} />
-          </TouchableOpacity>
           <Text style={styles.brandName}>Forgot Password</Text>
           <Text style={styles.brandSub}>
-            Enter your email to receive a reset token.
+            Enter your email to receive a reset password link.
           </Text>
         </View>
 
@@ -88,7 +87,7 @@ export default function ForgotPasswordScreen() {
             testID="forgot-submit-btn"
           >
             <Text style={styles.loginBtnText}>
-              {forgotMutation.isPending ? "Sending..." : "Send Reset Token"}
+              {forgotMutation.isPending ? "Sending..." : "Send Reset Password Link"}
             </Text>
           </TouchableOpacity>
         </View>

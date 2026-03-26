@@ -14,6 +14,10 @@ import { useAuthStore } from "@/shared/stores/authStore";
 export default function TabLayout() {
   const role = useAuthStore((state) => state.role);
   const isVolunteer = role === "Volunteer";
+  const hiddenTabOptions = {
+    tabBarButton: () => null,
+    tabBarItemStyle: { display: 'none' }
+  };
 
   return (
     <Tabs
@@ -26,40 +30,48 @@ export default function TabLayout() {
         tabBarItemStyle: styles.tabItem,
       }}
     >
-      {!isVolunteer && (
-        <Tabs.Screen
-          name="dashboard"
-          options={{
-            title: "Home",
-            tabBarIcon: ({ color, focused }) => (
-              <View style={[styles.iconWrap, focused && styles.iconWrapActive]}>
-                <LayoutDashboard
-                  size={20}
-                  color={color}
-                  strokeWidth={focused ? 2.2 : 1.6}
-                />
-              </View>
-            ),
-          }}
-        />
-      )}
-      {!isVolunteer && (
-        <Tabs.Screen
-          name="beneficiaries"
-          options={{
-            title: "People",
-            tabBarIcon: ({ color, focused }) => (
-              <View style={[styles.iconWrap, focused && styles.iconWrapActive]}>
-                <Users
-                  size={20}
-                  color={color}
-                  strokeWidth={focused ? 2.2 : 1.6}
-                />
-              </View>
-            ),
-          }}
-        />
-      )}
+      <Tabs.Screen
+        name="dashboard"
+        options={
+          isVolunteer
+            ? hiddenTabOptions
+            : {
+                title: "Home",
+                tabBarIcon: ({ color, focused }) => (
+                  <View
+                    style={[styles.iconWrap, focused && styles.iconWrapActive]}
+                  >
+                    <LayoutDashboard
+                      size={20}
+                      color={color}
+                      strokeWidth={focused ? 2.2 : 1.6}
+                    />
+                  </View>
+                ),
+              }
+        }
+      />
+      <Tabs.Screen
+        name="beneficiaries"
+        options={
+          isVolunteer
+            ? hiddenTabOptions
+            : {
+                title: "People",
+                tabBarIcon: ({ color, focused }) => (
+                  <View
+                    style={[styles.iconWrap, focused && styles.iconWrapActive]}
+                  >
+                    <Users
+                      size={20}
+                      color={color}
+                      strokeWidth={focused ? 2.2 : 1.6}
+                    />
+                  </View>
+                ),
+              }
+        }
+      />
       <Tabs.Screen
         name="activities"
         options={{
@@ -75,23 +87,27 @@ export default function TabLayout() {
           ),
         }}
       />
-      {!isVolunteer && (
-        <Tabs.Screen
-          name="donations"
-          options={{
-            title: "Funds",
-            tabBarIcon: ({ color, focused }) => (
-              <View style={[styles.iconWrap, focused && styles.iconWrapActive]}>
-                <HandCoins
-                  size={20}
-                  color={color}
-                  strokeWidth={focused ? 2.2 : 1.6}
-                />
-              </View>
-            ),
-          }}
-        />
-      )}
+      <Tabs.Screen
+        name="donations"
+        options={
+          isVolunteer
+            ? hiddenTabOptions
+            : {
+                title: "Funds",
+                tabBarIcon: ({ color, focused }) => (
+                  <View
+                    style={[styles.iconWrap, focused && styles.iconWrapActive]}
+                  >
+                    <HandCoins
+                      size={20}
+                      color={color}
+                      strokeWidth={focused ? 2.2 : 1.6}
+                    />
+                  </View>
+                ),
+              }
+        }
+      />
       <Tabs.Screen
         name="profile"
         options={{
@@ -121,6 +137,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.04,
     shadowRadius: 12,
     paddingTop: 6,
+    marginBottom: 8,
     ...(Platform.OS === "web" ? { height: 68 } : {}),
   },
   tabLabel: {

@@ -18,7 +18,7 @@ import { loginStyles as styles } from "../styles/loginStyles";
 export default function ResetPasswordScreen() {
   const params = useLocalSearchParams<{ token?: string }>();
   const resetMutation = useResetPasswordMutation();
-  const [token, setToken] = useState(params.token ?? "");
+  const token = params.token ?? "";
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -34,6 +34,14 @@ export default function ResetPasswordScreen() {
   );
 
   const handleReset = async () => {
+    if (!token) {
+      Alert.alert(
+        "Reset link missing",
+        "Please open the reset link from your email again.",
+      );
+      return;
+    }
+
     if (password !== confirmPassword) {
       Alert.alert("Password mismatch", "Please re-enter matching passwords.");
       return;
@@ -41,7 +49,10 @@ export default function ResetPasswordScreen() {
 
     try {
       await resetMutation.mutateAsync({ token, password });
-      Alert.alert("Password updated", "You can now sign in with your password.");
+      Alert.alert(
+        "Password updated",
+        "You can now sign in with your password.",
+      );
       router.replace("/(auth)/login" as any);
     } catch (error: any) {
       Alert.alert(
@@ -67,24 +78,11 @@ export default function ResetPasswordScreen() {
           </View>
           <Text style={styles.brandName}>Reset Password</Text>
           <Text style={styles.brandSub}>
-            Enter the reset token and your new password
+            Set a new password for your account
           </Text>
         </View>
 
         <View style={styles.formCard}>
-          <Text style={styles.label}>Reset Token</Text>
-          <View style={styles.inputWrap}>
-            <TextInput
-              style={styles.input}
-              placeholder="Paste token from email"
-              placeholderTextColor={Colors.textTertiary}
-              value={token}
-              onChangeText={setToken}
-              autoCapitalize="none"
-              testID="reset-token-input"
-            />
-          </View>
-
           <Text style={styles.label}>New Password</Text>
           <View style={styles.inputWrap}>
             <Lock size={17} color={Colors.textTertiary} strokeWidth={1.6} />
@@ -104,7 +102,11 @@ export default function ResetPasswordScreen() {
               {showPassword ? (
                 <Eye size={17} color={Colors.textTertiary} strokeWidth={1.6} />
               ) : (
-                <EyeOff size={17} color={Colors.textTertiary} strokeWidth={1.6} />
+                <EyeOff
+                  size={17}
+                  color={Colors.textTertiary}
+                  strokeWidth={1.6}
+                />
               )}
             </TouchableOpacity>
           </View>
