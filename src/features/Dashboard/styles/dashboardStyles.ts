@@ -4,7 +4,7 @@ import { Colors } from "@/shared/constants/color";
 export const dashboardStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.background,
+    backgroundColor: "transparent",
   },
   scroll: {
     flex: 1,
@@ -36,16 +36,11 @@ export const dashboardStyles = StyleSheet.create({
   statCard: {
     width: "48%",
     flexGrow: 1,
-    backgroundColor: Colors.surface,
+    backgroundColor: "rgba(255, 255, 255, 0.35)",
     borderRadius: 20,
     padding: 16,
-    shadowColor: Colors.textPrimary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 2,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.03)",
+    borderColor: "rgba(255,255,255, 0.8)",
   },
   statIconWrap: {
     width: 36,
@@ -82,11 +77,8 @@ export const dashboardStyles = StyleSheet.create({
     borderRadius: 18,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: Colors.textPrimary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.06,
-    shadowRadius: 10,
-    elevation: 3,
+    borderColor: "rgba(255,255,255, 0.8)",
+    borderWidth: 1,
   },
   quickActionLabel: {
     fontSize: 12,
@@ -119,17 +111,12 @@ export const dashboardStyles = StyleSheet.create({
   activityCard: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Colors.surface,
+    backgroundColor: "rgba(255, 255, 255, 0.35)",
     borderRadius: 20,
     marginBottom: 12,
     overflow: "hidden",
-    shadowColor: Colors.textPrimary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.04,
-    shadowRadius: 12,
-    elevation: 2,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.02)",
+    borderColor: "rgba(255, 255, 255, 0.8)",
   },
   activityIndicator: {
     width: 4,

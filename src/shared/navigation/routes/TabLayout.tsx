@@ -16,7 +16,7 @@ export default function TabLayout() {
   const isVolunteer = role === "Volunteer";
   const hiddenTabOptions = {
     tabBarButton: () => null,
-    tabBarItemStyle: { display: 'none' }
+    tabBarItemStyle: { display: "none" },
   };
 
   return (
@@ -129,15 +129,13 @@ export default function TabLayout() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: Colors.surface,
-    borderTopWidth: 0,
+    position: "absolute",
+    // backgroundColor: "rgba(255, 255, 255, 0.6)",
+    borderTopWidth: 1,
+    borderTopColor: "rgba(255, 255, 255, 0.8)",
     elevation: 0,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.04,
-    shadowRadius: 12,
-    paddingTop: 6,
-    marginBottom: 8,
+    shadowOpacity: 0,
+    paddingBottom: 10,
     ...(Platform.OS === "web" ? { height: 68 } : {}),
   },
   tabLabel: {

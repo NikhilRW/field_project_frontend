@@ -77,9 +77,15 @@ export const useDeepLinkBootstrap = () => {
       return;
     }
 
-    isHandling.current = true;
     const parsed = Linking.parse(url);
     const path = parsed.path ?? "";
+
+    // Only handle routes we actually care about
+    if (!path.includes("verify-email") && !path.includes("reset-password")) {
+      return;
+    }
+
+    isHandling.current = true;
     const token = parsed.queryParams?.token;
     const email = parsed.queryParams?.email;
 
