@@ -7,6 +7,7 @@ import {
 } from "react-native-reanimated";
 import { surveySlides } from "../constants/slides";
 import type { SurveySlide } from "../types/slide";
+import { scheduleOnRN } from "react-native-worklets";
 
 export const useSurveysCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,7 +27,7 @@ export const useSurveysCarousel = () => {
   const animateToSlide = (nextIndex: number) => {
     fadeAnim.value = withTiming(0, { duration: 180 }, (finished) => {
       if (finished) {
-        runOnJS(setCurrentIndex)(nextIndex);
+        scheduleOnRN(() => setCurrentIndex(nextIndex));
         slideAnim.value = 20;
         fadeAnim.value = withTiming(1, { duration: 220 });
         slideAnim.value = withTiming(0, { duration: 220 });

@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
 import { Colors } from "@/shared/constants/color";
 
 export const beneficiariesStyles = StyleSheet.create({
@@ -150,7 +150,7 @@ export const beneficiariesStyles = StyleSheet.create({
   },
   fab: {
     position: "absolute",
-    bottom: 90,
+    bottom: 120,
     right: 20,
     width: 50,
     height: 50,

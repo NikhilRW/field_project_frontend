@@ -1,6 +1,7 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from "react-native-unistyles";
 import { Colors } from "@/shared/constants/color";
 
+// use react-native-unistyles
 export const modalStyles = StyleSheet.create({
   overlay: {
     flex: 1,

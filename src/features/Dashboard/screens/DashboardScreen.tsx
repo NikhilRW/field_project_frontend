@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -34,10 +34,20 @@ import {
   getDashboardStatusColor,
 } from "../utils/statusColors";
 import { dashboardStyles as styles } from "../styles/dashboardStyles";
+import { useMutation } from "@tanstack/react-query";
 
 export default function DashboardScreen() {
   const insets = useSafeAreaInsets();
   const { data } = useDashboard();
+  
+  const { mutate } = useMutation({
+    mutationKey: ['hello'],
+    networkMode:'online'
+  });
+  
+  useEffect(() => {
+    mutate();
+  }, []);
 
   const stats = data?.stats ?? {
     beneficiaries: 0,
@@ -69,7 +79,13 @@ export default function DashboardScreen() {
         animated={true}
         style={StyleSheet.absoluteFill}
       />
-      <View style={{ flex: 1, paddingTop: insets.top,paddingBottom:insets.bottom + 10 }}>
+      <View
+        style={{
+          flex: 1,
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom + 40,
+        }}
+      >
         <AppHeader />
         <ScrollView
           style={styles.scroll}
@@ -295,7 +311,7 @@ export default function DashboardScreen() {
                         strokeWidth={2}
                       />
                       <Text style={styles.metaText} numberOfLines={1}>
-                        {activity.location}
+                        {activity.location.split(",")[0]}
                       </Text>
                     </View>
                   </View>

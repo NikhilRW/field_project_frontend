@@ -25,7 +25,7 @@ export default function ProfileScreen() {
       <View
         style={[
           styles.container,
-          { paddingTop: insets.top, backgroundColor: "transparent" },
+          { paddingTop: insets.top,paddingBottom: insets.bottom + 40, backgroundColor: "transparent" },
         ]}
       >
         <ScrollView

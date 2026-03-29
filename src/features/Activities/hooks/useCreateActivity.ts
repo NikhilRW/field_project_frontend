@@ -1,14 +1,9 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createActivity } from "../utils/api";
-import { activitiesQueryKey } from "./useActivities";
+import { useMutation } from "@tanstack/react-query";
+import { createActivityMutationKey } from "@/shared/config/tanstack";
+import type { CreateActivityPayload } from "../utils/api";
 
 export const useCreateActivity = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: createActivity,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: activitiesQueryKey });
-    },
+  return useMutation<unknown, Error, CreateActivityPayload>({
+    mutationKey: createActivityMutationKey,
   });
 };

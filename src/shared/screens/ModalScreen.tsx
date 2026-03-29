@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { modalStyles } from "@/shared/styles/modalStyles";
+import { modalStyles as styles } from "@/shared/styles/modalStyles";
 
 export default function ModalScreen() {
   return (
@@ -36,5 +36,3 @@ export default function ModalScreen() {
     </Modal>
   );
 }
-
-const styles = modalStyles;

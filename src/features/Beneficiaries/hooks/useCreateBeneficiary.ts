@@ -1,14 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createBeneficiary } from "../utils/api";
-import { beneficiariesQueryKey } from "./useBeneficiaries";
+import { useMutation } from "@tanstack/react-query";
+import { createBeneficiaryMutationKey } from "@/shared/config/tanstack";
+import type { CreateBeneficiaryPayload } from "../utils/api";
 
-export const useCreateBeneficiary = () => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: createBeneficiary,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: beneficiariesQueryKey });
-    },
+export const useCreateBeneficiary = () =>
+  useMutation<unknown, Error, CreateBeneficiaryPayload>({
+    mutationKey: createBeneficiaryMutationKey,
   });
-};

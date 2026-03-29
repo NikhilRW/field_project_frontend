@@ -1,18 +1,22 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FlashMessage from "react-native-flash-message";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import {
+  clientPersister,
+  queryClient,
+  resumePausedMutationsIfOnline,
+} from "@/shared/config/tanstack";
 import { useAuthGuard } from "@/shared/hooks/useAuthGuard";
 import { useDeepLinkBootstrap } from "@/shared/hooks/useDeepLinkBootstrap";
 import { usePushRegistration } from "@/shared/hooks/usePushRegistration";
 import { useAuthStore } from "@/shared/stores/authStore";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 SplashScreen.preventAutoHideAsync();
 
-const queryClient = new QueryClient();
 // TODO: modularize the styles here also
 function RootLayoutNav() {
   return (
@@ -114,11 +118,27 @@ export default function RootLayout() {
   }, [isHydrated]);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      onSuccess={resumePausedMutationsIfOnline}
+      persistOptions={{
+        persister: clientPersister,
+        maxAge: Infinity, // Keep mutations indefinitely for offline-first
+        dehydrateOptions: {
+          // Persist mutations that are queued/in-flight (paused = queued while offline)
+          shouldDehydrateMutation: (mutation: any) => {
+            return (
+              mutation.state.status === "pending" ||
+              mutation.state.status === "paused"
+            );
+          },
+        },
+      }}
+    >
       <GestureHandlerRootView style={{ flex: 1 }}>
         <RootLayoutNav />
         <FlashMessage position="bottom" style={{ marginBottom: bottom }} />
       </GestureHandlerRootView>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   );
 }

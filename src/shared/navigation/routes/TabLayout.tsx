@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useMemo } from "react";
 import { StyleSheet, View, Platform } from "react-native";
 import {
   LayoutDashboard,
@@ -14,9 +14,10 @@ import { useAuthStore } from "@/shared/stores/authStore";
 export default function TabLayout() {
   const role = useAuthStore((state) => state.role);
   const isVolunteer = role === "Volunteer";
+  // TODO: make all react files follow react best practices.
   const hiddenTabOptions = {
     tabBarButton: () => null,
-    tabBarItemStyle: { display: "none" },
+    tabBarItemStyle: { display: "none" as const },
   };
 
   return (
@@ -135,7 +136,7 @@ const styles = StyleSheet.create({
     borderTopColor: "rgba(255, 255, 255, 0.8)",
     elevation: 0,
     shadowOpacity: 0,
-    paddingBottom: 10,
+    paddingTop: 0,
     ...(Platform.OS === "web" ? { height: 68 } : {}),
   },
   tabLabel: {

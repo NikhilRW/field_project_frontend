@@ -18,6 +18,7 @@ type ActivityDraftState = {
   resetDraft: () => void;
 };
 
+// TODO: put it in separate store folder
 export const useActivityDraftStore = create<ActivityDraftState>((set) => ({
   name: "",
   date: null,

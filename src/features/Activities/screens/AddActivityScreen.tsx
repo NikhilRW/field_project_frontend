@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Check, ChevronDown, Plus } from "lucide-react-native";
 import { showMessage } from "react-native-flash-message";
+import NetInfo from "@react-native-community/netinfo";
 import { Colors } from "@/shared/constants/color";
 import { useVolunteers } from "@/features/Volunteers/hooks/useVolunteers";
 import type { ActivityStatus, Volunteer } from "@/shared/types/mock";
@@ -67,15 +68,32 @@ export default function AddActivityScreen() {
       return;
     }
 
-    try {
-      await createActivityMutation.mutateAsync({
-        name: name.trim(),
-        date: formatActivityDate(date!),
-        location: location.trim(),
-        description: description.trim(),
-        status,
-        volunteerIds,
+    const payload = {
+      name: name.trim(),
+      date: formatActivityDate(date!),
+      location: location.trim(),
+      description: description.trim(),
+      status,
+      volunteerIds,
+    };
+
+    const netState = await NetInfo.fetch();
+    const isOnline = Boolean(netState.isConnected);
+
+    if (!isOnline) {
+      createActivityMutation.mutate(payload);
+      showMessage({
+        message: "Activity queued",
+        description: "It will sync automatically when you are back online.",
+        type: "info",
       });
+      resetDraft();
+      router.back();
+      return;
+    }
+
+    try {
+      await createActivityMutation.mutateAsync(payload);
 
       showMessage({
         message: "Activity created",

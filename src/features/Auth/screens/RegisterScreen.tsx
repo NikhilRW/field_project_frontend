@@ -17,6 +17,8 @@ import { useRegisterForm } from "../hooks/useRegisterForm";
 import { useRegisterMutation } from "../hooks/useAuthMutations";
 import { loginStyles as styles } from "../styles/loginStyles";
 
+// TODO: use react hook form for all forms in the app
+
 export default function RegisterScreen() {
   const {
     selectedRole,

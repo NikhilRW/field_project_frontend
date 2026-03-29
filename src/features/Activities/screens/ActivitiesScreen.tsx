@@ -37,7 +37,7 @@ export default function ActivitiesScreen() {
       <View
         style={[
           styles.container,
-          { paddingTop: insets.top,paddingBottom:insets.bottom + 20, backgroundColor: "transparent" },
+          { paddingTop: insets.top,paddingBottom:insets.bottom + 40, backgroundColor: "transparent" },
         ]}
       >
         <AppHeader />

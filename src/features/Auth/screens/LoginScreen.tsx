@@ -17,6 +17,7 @@ import { useLoginForm } from "../hooks/useLoginForm";
 import { useLoginMutation } from "../hooks/useAuthMutations";
 import { loginStyles as styles } from "../styles/loginStyles";
 
+// TODO: glassy vibes same as our app in all auth screens.
 export default function LoginScreen() {
   const {
     selectedRole,

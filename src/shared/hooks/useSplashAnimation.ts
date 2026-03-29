@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import {
-  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
   withTiming,
 } from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 
 interface UseSplashAnimationOptions {
   onComplete?: () => void;
@@ -39,7 +39,7 @@ export const useSplashAnimation = (options: UseSplashAnimationOptions = {}) => {
               { duration: 1000 },
               (loadDone) => {
                 if (loadDone && onComplete) {
-                  runOnJS(onComplete)();
+                  scheduleOnRN(onComplete);
                 }
               },
             );

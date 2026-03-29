@@ -48,6 +48,7 @@ http.interceptors.request.use(
   async (config) => {
     const token = await getAccessToken();
     if (token) {
+      // TODO: solve this typescript error.
       config.headers = {
         ...config.headers,
         Authorization: `Bearer ${token}`,

@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import NetInfo from "@react-native-community/netinfo";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { showMessage } from "react-native-flash-message";
@@ -31,7 +32,7 @@ export default function AddBeneficiaryScreen() {
   const [healthStatus, setHealthStatus] = useState<HealthStatus>("Good");
   const [showCategoryPicker, setShowCategoryPicker] = useState(false);
   const [showHealthPicker, setShowHealthPicker] = useState(false);
-  const {mutateAsync: createBeneficiary,isPending:isSaving} = useCreateBeneficiary();
+  const { mutate, mutateAsync, isPending: isSaving } = useCreateBeneficiary();
 
   const genders: Gender[] = beneficiaryGenders;
   const categories: Category[] = beneficiaryCategories;
@@ -58,15 +59,32 @@ export default function AddBeneficiaryScreen() {
       return;
     }
 
-    try {
-      await createBeneficiary({
-        name: name.trim(),
-        age: parsedAge,
-        gender,
-        category,
-        address: address.trim(),
-        healthStatus,
+    const payload = {
+      name: name.trim(),
+      age: parsedAge,
+      gender,
+      category,
+      address: address.trim(),
+      healthStatus,
+    };
+
+    const netState = await NetInfo.fetch();
+    const isOnline = Boolean(netState.isConnected);
+
+    if (!isOnline) {
+      mutate(payload);
+      showMessage({
+        message: "Beneficiary queued",
+        description:
+          "No internet connection. This save will sync automatically when you're back online.",
+        type: "info",
       });
+      router.back();
+      return;
+    }
+
+    try {
+      await mutateAsync(payload);
 
       showMessage({
         message: "Beneficiary added",
@@ -262,9 +280,7 @@ export default function AddBeneficiaryScreen() {
           disabled={isSaving}
         >
           <Text style={styles.saveBtnText}>
-            {isSaving
-              ? "Saving..."
-              : "Save Beneficiary"}
+            {isSaving ? "Saving..." : "Save Beneficiary"}
           </Text>
         </TouchableOpacity>
       </View>
